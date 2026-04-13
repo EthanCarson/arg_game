@@ -1,13 +1,10 @@
 fileFormatVersion: 2
-guid: 494882e2c4e8ecc40919a2be55d144dd
+guid: 3bfe8456c5d9a51498d1302394b7b14e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3118429006348636515
-    second: ARG CHORACTER_0
-  - first:
-      213: -1113428022901486724
-    second: ARG CHORACTER_1
+      213: -3109272566200402028
+    second: Scaled Assets-2.png_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -103,45 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ARG CHORACTER_0
+      name: Scaled Assets-2.png_0
       rect:
         serializedVersion: 2
-        x: 7
-        y: 31
-        width: 17
-        height: 28
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 1, y: 1, z: 1, w: 1}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3615facb8a2e64b20800000000000000
-      internalID: 3118429006348636515
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ARG CHORACTER_1
-      rect:
-        serializedVersion: 2
-        x: 5
+        x: 0
         y: 0
-        width: 21
-        height: 27
+        width: 96
+        height: 96
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c7bcdf3cc1f4c80f0800000000000000
-      internalID: -1113428022901486724
+      spriteID: 49ff1cd1315a9d4d0800000000000000
+      internalID: -3109272566200402028
       vertices: []
       indices: 
       edges: []
@@ -150,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 367afcf2d9ea57f4a9f3e913ea2d9c43
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -160,8 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ARG CHORACTER_0: 3118429006348636515
-      ARG CHORACTER_1: -1113428022901486724
+      Scaled Assets-2.png_0: -3109272566200402028
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
