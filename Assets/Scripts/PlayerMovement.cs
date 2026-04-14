@@ -4,48 +4,103 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     public Rigidbody2D rb;
-    //Movement
+    bool isFacingRight = true;
+
+    // Movement
     public float moveSpeed = 5f;
     float horizontalMovement;
 
-    //Jumping
+    // Jumping
     public float jumpPower = 10f;
     public int maxJumps = 2;
     private int jumpsRemaining;
 
-    //Ground check
+    // Ground check
     public Transform groundCheckPos;
     public Vector2 groundCheckSize = new Vector2(0.5f, 0.05f);
     public LayerMask groundLayer;
+    bool isGrounded;
 
-    //Gravity
+    // Gravity
     public float baseGravity = 2f;
     public float maxFallSpeed = 18f;
     public float fallSpeedMultiplier = 2f;
 
+    // Wall check
+    public Transform wallCheckPos;
+    public Vector2 wallCheckSize = new Vector2(0.5f, 0.05f);
+    public LayerMask wallLayer;
+
+    // Wall slide
+    public float wallSlideSpeed = 2f;
+    bool isWallSliding;
+
+    // Wall jumping
+    public float wallJumpForce = 12f;
+    public float wallJumpHorizontalForce = 8f;
+    public float wallJumpTime = 0.2f;
+
+    private bool isWallJumping;
+    private float wallJumpDirection;
+    private float wallJumpTimer;
+
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        rb.linearVelocity = new Vector2(horizontalMovement * moveSpeed, rb.linearVelocity.y);
-        GoundCheck();
+        GroundCheck();
         Gravity();
+        Flip();
+        ProcessWallSlide();
+        HandleWallJump();
+
+        // Disable movement briefly during wall jump
+        if (!isWallJumping)
+        {
+            rb.linearVelocity = new Vector2(horizontalMovement * moveSpeed, rb.linearVelocity.y);
+        }
     }
 
     public void Gravity()
     {
-        if(rb.linearVelocity.y < 0 )
+        if (rb.linearVelocity.y < 0)
         {
-            rb.gravityScale = baseGravity * fallSpeedMultiplier; //Falls increasingly faster
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, Mathf.Max(rb.linearVelocity.y, -maxFallSpeed));//Maxes out fall speed
+            rb.gravityScale = baseGravity * fallSpeedMultiplier;
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, Mathf.Max(rb.linearVelocity.y, -maxFallSpeed));
         }
         else
         {
             rb.gravityScale = baseGravity;
+        }
+    }
+
+    public void ProcessWallSlide()
+    {
+        if (!isGrounded && WallCheck() && horizontalMovement != 0)
+        {
+            isWallSliding = true;
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, Mathf.Max(rb.linearVelocity.y, -wallSlideSpeed));
+        }
+        else
+        {
+            isWallSliding = false;
+        }
+    }
+
+    void HandleWallJump()
+    {
+        if (isWallSliding)
+        {
+            isWallJumping = false;
+            wallJumpDirection = -transform.localScale.x;
+            wallJumpTimer = wallJumpTime;
+        }
+        else
+        {
+            wallJumpTimer -= Time.deltaTime;
         }
     }
 
@@ -56,36 +111,75 @@ public class PlayerMovement : MonoBehaviour
 
     public void Jump(InputAction.CallbackContext context)
     {
-        if(jumpsRemaining > 0)
+        if (context.performed)
         {
-            if(context.performed)
+            // Wall jump
+            if (wallJumpTimer > 0f)
             {
-                //Hold down = full height
+                isWallJumping = true;
+
+                rb.linearVelocity = new Vector2(
+                    wallJumpDirection * wallJumpHorizontalForce,
+                    wallJumpForce
+                );
+
+                wallJumpTimer = 0;
+                jumpsRemaining = maxJumps - 1;
+            }
+            // Normal jump
+            else if (jumpsRemaining > 0)
+            {
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpPower);
                 jumpsRemaining--;
             }
-            else if (context.canceled)
-            {
-                //Tap = half height
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
-                jumpsRemaining--;
-            }
         }
-        
+        else if (context.canceled && rb.linearVelocity.y > 0)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.5f);
+        }
     }
 
-    private void GoundCheck()
+    private void GroundCheck()
     {
-        if(Physics2D.OverlapBox(groundCheckPos.position, groundCheckSize, 0, groundLayer))
+        if (Physics2D.OverlapBox(groundCheckPos.position, groundCheckSize, 0, groundLayer))
         {
             jumpsRemaining = maxJumps;
+            isGrounded = true;
         }
-
+        else
+        {
+            isGrounded = false;
+        }
     }
 
-    private void OnDrawGizmoSelected()
+    private bool WallCheck()
     {
-        Gizmos.color = Color.black;
-        Gizmos.DrawWireCube(groundCheckPos.position, groundCheckSize);
+        return Physics2D.OverlapBox(wallCheckPos.position, wallCheckSize, 0, wallLayer);
+    }
+
+    private void Flip()
+    {
+        if ((isFacingRight && horizontalMovement < 0) || (!isFacingRight && horizontalMovement > 0))
+        {
+            isFacingRight = !isFacingRight;
+            Vector3 ls = transform.localScale;
+            ls.x *= -1f;
+            transform.localScale = ls;
+        }
+    }
+
+    public void OnDrawGizmosSelected()
+    {
+        if (groundCheckPos != null)
+        {
+            Gizmos.color = Color.white;
+            Gizmos.DrawWireCube(groundCheckPos.position, groundCheckSize);
+        }
+
+        if (wallCheckPos != null)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireCube(wallCheckPos.position, wallCheckSize);
+        }
     }
 }
