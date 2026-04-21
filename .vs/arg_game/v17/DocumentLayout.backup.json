@@ -51,8 +51,7 @@
               "RelativeToolTip": "Assets\\Scripts\\AnswerBlock.cs",
               "ViewState": "AgIAADoAAAAAAAAAAAAmwFMAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-14T19:31:40.721Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-14T19:31:40.721Z"
             },
             {
               "$type": "Document",
@@ -64,8 +63,7 @@
               "RelativeToolTip": "Assets\\Scripts\\SceneLoader.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-06T21:47:12.204Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-06T21:47:12.204Z"
             },
             {
               "$type": "Document",
@@ -77,8 +75,7 @@
               "RelativeToolTip": "Assets\\Scripts\\PlayerMovement.cs",
               "ViewState": "AgIAAJIAAAAAAAAAAAAmwLgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-06T20:54:21.292Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-06T20:54:21.292Z"
             }
           ]
         }
