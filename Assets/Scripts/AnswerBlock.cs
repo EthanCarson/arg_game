@@ -4,8 +4,12 @@ using System.Collections;
 public class AnswerBlock : MonoBehaviour
 {
     [Header("Answer Settings")]
-    public string answerID;   // A, B, C, or D
-    public string answerText; // What the option says
+    public string answerID;   
+    public string answerText; 
+
+    [Header("Audio Settings")]
+    public AudioClip hitSound;         
+    private AudioSource audioSource;    
 
     [Header("Bounce Settings")]
     public float bounceHeight = 0.2f;
@@ -17,6 +21,15 @@ public class AnswerBlock : MonoBehaviour
     void Start()
     {
         startPos = transform.position;
+        
+        // Grab the AudioSource component on this object
+        audioSource = GetComponent<AudioSource>();
+        
+        // Safety check: Add one if it's missing
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -27,7 +40,7 @@ public class AnswerBlock : MonoBehaviour
         {
             foreach (ContactPoint2D contact in collision.contacts)
             {
-                // Hit from below (Mario-style)
+                // Normal.y > 0.5 means the hit is coming from below
                 if (contact.normal.y > 0.5f)
                 {
                     ActivateBlock();
@@ -41,11 +54,13 @@ public class AnswerBlock : MonoBehaviour
     {
         hasBeenHit = true;
 
+        if (audioSource != null && hitSound != null)
+        {
+            audioSource.PlayOneShot(hitSound);
+        }
+
         Debug.Log("Selected: " + answerID + " (" + answerText + ")");
-
         StartCoroutine(Bounce());
-
-        // Send selection to manager (optional system hook)
         QuestionManager.instance.SubmitAnswer(this);
     }
 
